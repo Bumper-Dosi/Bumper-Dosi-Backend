@@ -9,15 +9,17 @@ const server = http.createServer(app);
 const logger = require("morgan");
 const cors = require("cors");
 app.use(cors());
+app.use(logger("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 const port = process.env.PORT;
 server.listen(port, () => {
   console.log(`App running on port ${port}...`);
 });
 
-app.use(logger("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+const signup = require("./routes/signup");
+app.use("/signup", signup);
 
 app.use(function (req, res, next) {
   next(createError(404));
