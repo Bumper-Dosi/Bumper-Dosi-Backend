@@ -1,0 +1,32 @@
+{
+  "name": "bumper-dosi-backend",
+  "version": "0.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "front": "cd .. && cd bumper-dosi-frontend && npm start",
+    "back": "NODE_ENV=development nodemon app.js",
+    "dev": "concurrently \"npm run front\" \"npm run back\"",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pret": "npx prettier --write ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "firebase-admin": "^10.2.0",
+    "mongodb": "^4.6.0",
+    "mongoose": "^6.3.5",
+    "socket.io": "^4.5.1"
+  },
+  "devDependencies": {
+    "concurrently": "^7.2.1",
+    "eslint": "^8.16.0",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.16",
+    "prettier": "2.6.2"
+  }
+}
