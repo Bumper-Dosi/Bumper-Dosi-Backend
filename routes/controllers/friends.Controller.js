@@ -7,14 +7,13 @@ exports.getFriendList = async (req, res, next) => {
     const user = await User.findOne({ uid });
     const friendList = user.friends;
 
-    if (friendList === null) return;
-
-    if (friendList) {
-      res.status = 200;
-      res.json({ friendList });
+    if (!friendList.length) {
+      return res.status(204);
     }
+
+    res.status = 200;
+    res.json({ friendList });
   } catch (error) {
-    res.send({ message: "server error" });
-    next(error);
+    res.status(500).send({ message: "server error" });
   }
 };
