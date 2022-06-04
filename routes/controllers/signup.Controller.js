@@ -1,20 +1,15 @@
 const User = require("../../models/User");
 
-async function findOrSaveUser(userEmail) {
+async function findOrCreateUser(userEmail) {
   if (userEmail === null) return;
 
-  const userData = await User.findOne({ email: userEmail });
-
-  if (userData) return userData;
-
-  return await User.create({ email: userEmail });
+  return await User.findOrCreate({ email: userEmail });
 }
 
-exports.saveUser = async (req, res, next) => {
+exports.createUser = async (req, res, next) => {
   try {
     const userEmail = req.body.email;
-
-    const user = await findOrSaveUser(userEmail);
+    const user = await findOrCreateUser(userEmail);
 
     if (user) {
       res.status = 200;
