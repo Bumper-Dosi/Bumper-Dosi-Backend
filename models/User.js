@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const findOrCreate = require("mongoose-findorcreate");
 
 const UserSchema = new mongoose.Schema({
-  email: { type: String },
+  uid: { type: String },
   friends: [String],
   chatLists: [
     {
