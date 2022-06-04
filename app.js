@@ -19,7 +19,9 @@ server.listen(port, () => {
 });
 
 const signup = require("./routes/signup");
+const friends = require("./routes/friends");
 app.use("/signup", signup);
+app.use("/friends", friends);
 
 app.use(function (req, res, next) {
   next(createError(404));
