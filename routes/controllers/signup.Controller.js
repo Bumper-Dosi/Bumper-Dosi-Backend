@@ -19,4 +19,4 @@ exports.createUser = async (req, res, next) => {
     res.send({ message: "server error" });
     next(error);
   }
-}
+};
