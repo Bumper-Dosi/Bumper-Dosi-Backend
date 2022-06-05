@@ -15,7 +15,7 @@ exports.getFriendList = async (req, res, next) => {
     res.status = 200;
     res.json({ friendList });
   } catch (error) {
-    res.status(500).send({ message: "server error" });
+    res.status(500).json({ message: "server error" });
   }
 };
 
@@ -45,26 +45,20 @@ exports.addFriend = async (req, res, next) => {
 };
 
 exports.deleteFriend = async (req, res, next) => {
-  const targetFriendUid = req.body.friendUid;
-  const uid = req.user.uid;
+  const myUid = req.userData.uid;
+  const friendUid = req.body.uid;
 
   try {
-    const user = await User.findOne({ uid });
+    const user = await User.findOne({ uid: myUid });
     const friendList = user.friends;
 
-    if (!friendList.includes(targetFriendUid)) {
-      return res.status(202).json({ message: "Already Deleted" });
+    if (!friendList.includes(friendUid)) {
+      return res.status(200).json({ message: "Already Deleted" });
     }
 
-    const filteredFriendList = friendList.filter(friendUid => {
-      if (targetFriendUid === friendUid) {
-        return false;
-      }
+    const filteredFriendList = friendList.filter((uid) => friendUid !== uid);
 
-      return true;
-    });
-
-    await User.findOneAndUpdate({ uid }, { $set: { friends: filteredFriendList } });
+    await User.findOneAndUpdate({ uid: myUid }, { $set: { friends: filteredFriendList } });
     res.status(200).json({ message: "Delete complete" });
   } catch (error) {
     res.status(500).json({ message: "server error" });
