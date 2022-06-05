@@ -20,14 +20,12 @@ exports.getFriendList = async (req, res, next) => {
 };
 
 exports.addFriend = async (req, res, next) => {
-  const friendUid = req.body.friendUid;
-  const token = req.headers.authorization.split("Bearer ")[1];
-  const decodedToken = await admin.auth().verifyIdToken(token);
-  const uid = decodedToken.uid;
+  const myUid = req.userData
+  const friendUid = req.body.uid;
 
   try {
     const friend = await User.findOne({ uid: friendUid });
-    const user = await User.findOne({ uid });
+    const user = await User.findOne({ uid: myUid });
     const friendList = user.friends;
 
     if (friendList.includes(friendUid)) {
@@ -35,7 +33,7 @@ exports.addFriend = async (req, res, next) => {
     }
 
     friendList.push(friend.uid);
-    await User.findOneAndUpdate({ uid }, { $set: { friends: friendList } });
+    await User.findOneAndUpdate({ uid: myUid }, { $set: { friends: friendList } });
 
     res.status(201).json({ message: "Add complete" });
   } catch (error) {
