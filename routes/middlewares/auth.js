@@ -10,6 +10,7 @@ const verifyToken = async (req, res, next) => {
   try {
     const token = req.headers.authorization.split("Bearer ")[1];
     const userData = await admin.auth().verifyIdToken(token);
+
     req.userData = userData;
     next();
   } catch (error) {
