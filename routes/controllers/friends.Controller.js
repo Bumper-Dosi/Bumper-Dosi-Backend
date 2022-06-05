@@ -56,7 +56,7 @@ exports.deleteFriend = async (req, res, next) => {
       return res.status(200).json({ message: "Already Deleted" });
     }
 
-    const filteredFriendList = friendList.filter((uid) => friendUid !== uid);
+    const filteredFriendList = friendList.filter((uid) => uid !== friendUid);
 
     await User.findOneAndUpdate({ uid: myUid }, { $set: { friends: filteredFriendList } });
     res.status(200).json({ message: "Delete complete" });
