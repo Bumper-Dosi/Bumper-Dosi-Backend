@@ -15,7 +15,7 @@ exports.getFriendList = async (req, res, next) => {
     res.status = 200;
     res.json({ friendList });
   } catch (error) {
-    res.status(500).send({ message: "server error" });
+    res.status(500).json({ message: "server error" });
   }
 };
 
@@ -35,11 +35,32 @@ exports.addFriend = async (req, res, next) => {
     friendList.push(friend.uid);
     await User.findOneAndUpdate(
       { uid: myUid },
-      { $set: { friends: friendList } }
+      { $set: { friends: friendList } },
     );
 
     res.status(201).json({ message: "Add complete" });
   } catch (error) {
     res.status(400).json({ message: "User not found" });
+  }
+};
+
+exports.deleteFriend = async (req, res, next) => {
+  const myUid = req.userData.uid;
+  const friendUid = req.body.uid;
+
+  try {
+    const user = await User.findOne({ uid: myUid });
+    const friendList = user.friends;
+
+    if (!friendList.includes(friendUid)) {
+      return res.status(200).json({ message: "Already Deleted" });
+    }
+
+    const filteredFriendList = friendList.filter((uid) => uid !== friendUid);
+
+    await User.findOneAndUpdate({ uid: myUid }, { $set: { friends: filteredFriendList } });
+    res.status(200).json({ message: "Delete complete" });
+  } catch (error) {
+    res.status(500).json({ message: "server error" });
   }
 };
