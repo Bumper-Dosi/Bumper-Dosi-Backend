@@ -20,7 +20,7 @@ exports.getFriendList = async (req, res, next) => {
 };
 
 exports.addFriend = async (req, res, next) => {
-  const myUid = req.userData
+  const myUid = req.userData.uid;
   const friendUid = req.body.uid;
 
   try {
@@ -33,7 +33,10 @@ exports.addFriend = async (req, res, next) => {
     }
 
     friendList.push(friend.uid);
-    await User.findOneAndUpdate({ uid: myUid }, { $set: { friends: friendList } });
+    await User.findOneAndUpdate(
+      { uid: myUid },
+      { $set: { friends: friendList } }
+    );
 
     res.status(201).json({ message: "Add complete" });
   } catch (error) {
