@@ -35,11 +35,38 @@ exports.addFriend = async (req, res, next) => {
     friendList.push(friend.uid);
     await User.findOneAndUpdate(
       { uid: myUid },
-      { $set: { friends: friendList } }
+      { $set: { friends: friendList } },
     );
 
     res.status(201).json({ message: "Add complete" });
   } catch (error) {
     res.status(400).json({ message: "User not found" });
+  }
+};
+
+exports.deleteFriend = async (req, res, next) => {
+  const targetFriendUid = req.body.friendUid;
+  const uid = req.user.uid;
+
+  try {
+    const user = await User.findOne({ uid });
+    const friendList = user.friends;
+
+    if (!friendList.includes(targetFriendUid)) {
+      return res.status(202).json({ message: "Already Deleted" });
+    }
+
+    const filteredFriendList = friendList.filter(friendUid => {
+      if (targetFriendUid === friendUid) {
+        return false;
+      }
+
+      return true;
+    });
+
+    await User.findOneAndUpdate({ uid }, { $set: { friends: filteredFriendList } });
+    res.status(200).json({ message: "Delete complete" });
+  } catch (error) {
+    res.status(500).json({ message: "server error" });
   }
 };
