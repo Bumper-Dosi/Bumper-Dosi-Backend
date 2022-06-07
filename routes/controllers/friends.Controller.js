@@ -35,7 +35,7 @@ exports.addFriend = async (req, res, next) => {
     friendList.push(friend.uid);
     await User.findOneAndUpdate(
       { uid: myUid },
-      { $set: { friends: friendList } },
+      { $set: { friends: friendList } }
     );
 
     res.status(201).json({ message: "Add complete" });
@@ -58,7 +58,10 @@ exports.deleteFriend = async (req, res, next) => {
 
     const filteredFriendList = friendList.filter((uid) => uid !== friendUid);
 
-    await User.findOneAndUpdate({ uid: myUid }, { $set: { friends: filteredFriendList } });
+    await User.findOneAndUpdate(
+      { uid: myUid },
+      { $set: { friends: filteredFriendList } }
+    );
     res.status(200).json({ message: "Delete complete" });
   } catch (error) {
     res.status(500).json({ message: "server error" });

@@ -1,25 +1,30 @@
 const path = require("path");
 require("dotenv").config({ path: path.resolve(__dirname + "/.env") });
 require("./config/database");
-
 const http = require("http");
 const express = require("express");
 const app = express();
 const server = http.createServer(app);
 const logger = require("morgan");
 const cors = require("cors");
-app.use(cors());
-app.use(logger("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-
+const socket = require("./config/socket");
 const port = process.env.PORT;
+const corsOptions = {
+  origin: "http://localhost:3000",
+};
+const signup = require("./routes/signup");
+const friends = require("./routes/friends");
+
 server.listen(port, () => {
   console.log(`App running on port ${port}...`);
 });
 
-const signup = require("./routes/signup");
-const friends = require("./routes/friends");
+app.use(cors(corsOptions));
+app.use(logger("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+socket.loader(server);
+
 app.use("/signup", signup);
 app.use("/friends", friends);
 
