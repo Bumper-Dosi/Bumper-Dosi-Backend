@@ -12,10 +12,10 @@ const verifyToken = async (req, res, next) => {
     const userData = await admin.auth().verifyIdToken(token);
 
     req.userData = userData;
+
     next();
   } catch (error) {
-    res.status(401);
-    return res.json({ message: "유저확인 불가" });
+    return res.status(401).json({ message: "유저확인 불가" });
   }
 };
 
