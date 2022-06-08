@@ -7,7 +7,7 @@ exports.getFriendList = async (req, res, next) => {
     const user = await User.findOne({ uid });
     const friendList = user.friends;
     const friends = await User.find({
-      "uid": { $in: friendList },
+      uid: { $in: friendList },
     });
 
     res.status(200).json({ friends });
@@ -32,11 +32,11 @@ exports.addFriend = async (req, res, next) => {
 
     await User.findOneAndUpdate(
       { uid: myUid },
-      { $set: { friends: friendList } },
+      { $set: { friends: friendList } }
     );
 
     const friends = await User.find({
-      "uid": { $in: friendList },
+      uid: { $in: friendList },
     });
 
     res.status(201).json({ friends });
@@ -61,11 +61,11 @@ exports.deleteFriend = async (req, res, next) => {
 
     await User.findOneAndUpdate(
       { uid: myUid },
-      { $set: { friends: filteredFriendList } },
+      { $set: { friends: filteredFriendList } }
     );
 
     const friends = await User.find({
-      "uid": { $in: filteredFriendList },
+      uid: { $in: filteredFriendList },
     });
 
     res.status(200).json({ friends });

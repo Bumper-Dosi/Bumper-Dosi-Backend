@@ -1,13 +1,5 @@
 const mongoose = require("mongoose");
 
-const ChatRoomSchema = new mongoose.Schema({
-  users: {
-    type: [String],
-    required: true,
-  },
-  contents: [MessageSchema],
-});
-
 const MessageSchema = new mongoose.Schema(
   {
     user: {
@@ -16,7 +8,15 @@ const MessageSchema = new mongoose.Schema(
     },
     content: String,
   },
-  { timestamps: true },
+  { timestamps: true }
 );
+
+const ChatRoomSchema = new mongoose.Schema({
+  users: {
+    type: [String],
+    required: true,
+  },
+  contents: [MessageSchema],
+});
 
 module.exports = mongoose.model("Chat", ChatRoomSchema);
