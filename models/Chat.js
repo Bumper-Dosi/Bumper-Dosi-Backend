@@ -16,7 +16,7 @@ const MessageSchema = new mongoose.Schema(
     },
     content: String,
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 module.exports = mongoose.model("Chat", ChatRoomSchema);
