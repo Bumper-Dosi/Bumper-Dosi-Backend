@@ -21,12 +21,11 @@ exports.loader = (server) => {
       });
 
       socket.emit("prevMessages", { contents: chatRoom.contents });
-      socket.join(roomId); // uid기반 특정한 룸네임
+      socket.join(roomId);
     });
 
     socket.on("message", (message) => {
-      console.log(message);
-      io.to(message.roomName).emit("message", message.message);
+      socket.to(message.roomName).emit("message", message);
     });
 
     socket.on("disconnect", () => {

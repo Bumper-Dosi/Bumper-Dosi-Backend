@@ -1,13 +1,14 @@
 const ChatRooms = require("../models/Chat");
 
 exports.findOrCreateChatRoom = async ({ user, friend }) => {
-  const codedId = [user, friend].sort().join("");
-  let myChatRoom;
+  const chatRooms = await ChatRooms.find({});
+  let myChatRoom = chatRooms.find((chatRoom) => {
+    if (chatRoom.users.includes(user) && chatRoom.users.includes(friend))
+      return chatRoom;
+  });
 
-  try {
-    myChatRoom = await ChatRooms.findById(codedId);
-  } catch (error) {
-    myChatRoom = await ChatRooms.create({ id: codedId, users: [user, friend] });
+  if (!myChatRoom) {
+    myChatRoom = await ChatRooms.create({ users: [user, friend] });
   }
 
   return myChatRoom;
