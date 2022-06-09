@@ -22,6 +22,10 @@ exports.addFriend = async (req, res, next) => {
   try {
     const friend = await User.findOne({ name: req.body.friendName });
     const user = await User.findOne({ uid: myUid });
+
+    if (user.name === friend.name)
+      return res.status(400).json({ message: "자신을 추가할 수 없습니다!" });
+
     const friendList = user.friends;
 
     if (friendList.includes(friend.uid)) {

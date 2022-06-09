@@ -24,8 +24,16 @@ exports.loader = (server) => {
       socket.join(roomId);
     });
 
-    socket.on("message", (message) => {
-      socket.to(message.roomName).emit("message", message);
+    socket.on("message", async (content) => {
+      const user = content.user;
+      const friend = content.roomName.replace(user, "");
+
+      socket.to(content.roomName).emit("message", content);
+      await chatRooms.updateChatRoom({ user, friend, message: content });
+    });
+
+    socket.on("save messages", async ({ contents }) => {
+      await chatRooms.saveChatRoom(contents);
     });
 
     socket.on("disconnect", () => {
