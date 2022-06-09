@@ -1,15 +1,27 @@
 const ChatRooms = require("../models/Chat");
 
 exports.findOrCreateChatRoom = async ({ user, friend }) => {
-  const chatRooms = await ChatRooms.find({});
-  let myChatRoom = chatRooms.find((chatRoom) => {
-    if (chatRoom.users.includes(user) && chatRoom.users.includes(friend))
-      return chatRoom;
-  });
+  const chatRoom = await ChatRooms.findOne({ users: { $all: [user, friend] } });
 
-  if (!myChatRoom) {
-    myChatRoom = await ChatRooms.create({ users: [user, friend] });
-  }
+  if (chatRoom) return chatRoom;
 
-  return myChatRoom;
+  return ChatRooms.create({ users: [user, friend] });
+};
+
+exports.updateChatRoom = async ({ user, friend, message }) => {
+  const chatRoom = await ChatRooms.findOneAndUpdate(
+    { users: { $all: [user, friend] } },
+    { $push: { contents: message } }
+  );
+
+  return chatRoom;
+};
+
+exports.saveChatRoom = async ({ user, friend, messages }) => {
+  const chatRoom = await ChatRooms.findOneAndUpdate(
+    { users: { $all: [user, friend] } },
+    { $set: { contents: messages } }
+  );
+
+  return chatRoom;
 };

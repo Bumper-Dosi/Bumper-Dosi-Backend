@@ -6,7 +6,11 @@ const MessageSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    content: String,
+    message: String,
+    timestamps: {
+      type: Number,
+      required: true,
+    },
   },
   { timestamps: true }
 );
