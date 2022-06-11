@@ -10,9 +10,13 @@ exports.loader = (server) => {
     },
   });
 
-  io.on("connection", (socket) => {
-    console.log("a user connected");
+  let users = {};
 
+  io.on("connection", (socket) => {
+    console.log(`${socket.id} user connected`);
+    console.log(`current connected user : ${io.engine.clientsCount}`);
+
+    // Chat socket
     socket.on("chatRoom", async ({ users }) => {
       const roomId = users.sort().join("");
       const chatRoom = await chatRooms.findOrCreateChatRoom({
@@ -36,8 +40,28 @@ exports.loader = (server) => {
       await chatRooms.saveChatRoom(contents);
     });
 
+    // Waiting Room socket
+    socket.on("joinWorld", (userInfo) => {
+      userInfo.socketId = socket.id;
+      users[userInfo.socketId] = userInfo;
+      socket.broadcast.emit("joinWorld", userInfo);
+    });
+
+    socket.on("noticeMe", (userInfo) => {
+      userInfo.socketId = socket.id;
+      socket.broadcast.emit("noticeMe", userInfo);
+    });
+
+    socket.on("userMovement", (data) => {
+      data.socketId = socket.id;
+      socket.broadcast.emit("userMovement", data);
+    });
+
     socket.on("disconnect", () => {
       console.log("user disconnected");
+      delete users[socket.id];
+
+      socket.broadcast.emit("deletePlayer", { id: socket.id });
     });
   });
 };
