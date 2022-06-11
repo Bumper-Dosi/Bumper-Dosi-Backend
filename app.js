@@ -1,43 +1,19 @@
-const path = require("path");
-require("dotenv").config({ path: path.resolve(__dirname + "/.env") });
-require("./config/database");
-const http = require("http");
 const express = require("express");
 const app = express();
-const server = http.createServer(app);
-const logger = require("morgan");
-const cors = require("cors");
-const socket = require("./config/socket");
-const port = process.env.PORT;
-const corsOptions = {
-  origin: "http://localhost:3000",
-};
+const path = require("path");
+require("dotenv").config({ path: path.resolve(__dirname + "/.env") });
+const initialLoader = require("./loader");
+const errorHandler = require("./error");
+const connectServer = require("./server");
 const signup = require("./routes/signup");
 const friends = require("./routes/friends");
 
-server.listen(port, () => {
-  console.log(`App running on port ${port}...`);
-});
-
-app.use(cors(corsOptions));
-app.use(logger("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-socket.loader(server);
+connectServer(app);
+initialLoader(app);
 
 app.use("/signup", signup);
 app.use("/friends", friends);
 
-app.use(function (req, res, next) {
-  next(createError(404));
-});
-
-app.use(function (err, req, res, next) {
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
-
-  res.status(err.status || 500);
-  res.render("error");
-});
+errorHandler(app);
 
 module.exports = app;
