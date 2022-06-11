@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { ServerError } = require("../error/customError");
 
 const connectDB = async () => {
   try {
@@ -9,6 +10,7 @@ const connectDB = async () => {
     console.log("MongoDB connected...");
   } catch (error) {
     console.log("Failed to conect to MOngoDB");
+    return next(new ServerError());
   }
 };
 
