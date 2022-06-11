@@ -1,3 +1,4 @@
+const { ServerError } = require("../../error/customError");
 const User = require("../../models/User");
 
 async function findOrCreateUser(uid, name) {
@@ -15,7 +16,6 @@ exports.createUser = async (req, res, next) => {
       res.status(200).json({ message: "success" });
     }
   } catch (error) {
-    res.status(500).json({ message: "server error" });
-    next(error);
+    return next(new ServerError());
   }
 };
