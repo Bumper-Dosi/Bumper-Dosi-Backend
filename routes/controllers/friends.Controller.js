@@ -3,6 +3,8 @@ const {
   ADD_MYSELF,
   UNVALID_USER,
   DELETED_USER,
+  REGISTER_SUCCESS,
+  DELETE_SUCESS,
 } = require("../../constants");
 const { BadRequest, ServerError } = require("../../error/customError");
 const User = require("../../models/User");
@@ -49,7 +51,7 @@ exports.addFriend = async (req, res, next) => {
       uid: { $in: friendList },
     });
 
-    return res.status(201).json({ friends, message: "등록 완료됐습니다." });
+    return res.status(201).json({ friends, message: REGISTER_SUCCESS });
   } catch (error) {
     return next(new BadRequest(UNVALID_USER, error.stack));
   }
@@ -78,7 +80,7 @@ exports.deleteFriend = async (req, res, next) => {
       uid: { $in: filteredFriendList },
     });
 
-    return res.status(200).json({ friends, message: "삭제완료" });
+    return res.status(200).json({ friends, message: DELETE_SUCESS });
   } catch (error) {
     return next(new ServerError());
   }
