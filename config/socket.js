@@ -49,13 +49,11 @@ exports.loader = (server) => {
       socket.broadcast.to("world").emit("joinWorld", userInfo);
 
       socket.on("noticeMe", (userInfo) => {
-
         userInfo.socketId = socket.id;
         socket.broadcast.to("world").emit("noticeMe", userInfo);
       });
 
       socket.on("userMovement", (data) => {
-
         data.socketId = socket.id;
         socket.broadcast.to("world").emit("userMovement", data);
       });
@@ -83,7 +81,6 @@ exports.loader = (server) => {
     socket.on("disconnect", () => {
       console.log("user disconnected");
       delete users[socket.id];
-
       socket.broadcast.emit("deletePlayer", { id: socket.id });
     });
   });
