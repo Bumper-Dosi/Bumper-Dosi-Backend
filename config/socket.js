@@ -44,18 +44,41 @@ exports.loader = (server) => {
     socket.on("joinWorld", (userInfo) => {
       userInfo.socketId = socket.id;
       users[userInfo.socketId] = userInfo;
-      socket.broadcast.emit("joinWorld", userInfo);
+      socket.join("world");
+
+      socket.broadcast.to("world").emit("joinWorld", userInfo);
+
+      socket.on("noticeMe", (userInfo) => {
+
+        userInfo.socketId = socket.id;
+        socket.broadcast.to("world").emit("noticeMe", userInfo);
+      });
+
+      socket.on("userMovement", (data) => {
+
+        data.socketId = socket.id;
+        socket.broadcast.to("world").emit("userMovement", data);
+      });
     });
 
-    socket.on("noticeMe", (userInfo) => {
+    //GameRoom Socket
+    socket.on("joinGame", (userInfo) => {
       userInfo.socketId = socket.id;
-      socket.broadcast.emit("noticeMe", userInfo);
-    });
+      users[userInfo.socketId] = userInfo;
+      socket.join("gameRoom1");
 
-    socket.on("userMovement", (data) => {
-      data.socketId = socket.id;
-      socket.broadcast.emit("userMovement", data);
-    });
+      socket.broadcast.to("gameRoom1").emit("joinWorld", userInfo);
+
+      socket.on("noticeMe", (userInfo) => {
+        userInfo.socketId = socket.id;
+        socket.broadcast.to("gameRoom1").emit("noticeMe", userInfo);
+      });
+
+      socket.on("userMovement", (data) => {
+        data.socketId = socket.id;
+        socket.broadcast.to("gameRoom1").emit("userMovement", data);
+      });
+    })
 
     socket.on("disconnect", () => {
       console.log("user disconnected");
