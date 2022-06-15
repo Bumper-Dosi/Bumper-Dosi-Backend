@@ -1,5 +1,5 @@
 const express = require("express");
-const logger = require("morgan");
+//const logger = require("morgan");
 const cors = require("cors");
 const connectDB = require("../config/database");
 const corsOptions = {
@@ -9,7 +9,7 @@ const corsOptions = {
 const initialLoader = (app) => {
   connectDB();
   app.use(cors(corsOptions));
-  app.use(logger("dev"));
+  //app.use(logger("dev"));
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
 };
