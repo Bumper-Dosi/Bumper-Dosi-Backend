@@ -8,12 +8,16 @@ const connectServer = require("./server");
 const signup = require("./routes/signup");
 const friends = require("./routes/friends");
 
-connectServer(app);
-initialLoader(app);
+const startApp = async(app) => {
+  await initialLoader(app);
+  connectServer(app);
 
-app.use("/signup", signup);
-app.use("/friends", friends);
+  app.use("/signup", signup);
+  app.use("/friends", friends);
 
-errorHandler(app);
+  errorHandler(app);
+}
+
+startApp(app);
 
 module.exports = app;
