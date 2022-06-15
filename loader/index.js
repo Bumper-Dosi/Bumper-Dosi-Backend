@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const connectDB = require("../config/database");
 const corsOptions = {
-  origin: "http://http://www.bumperdosi.com",
+  origin: "http://localhost:3000",
 };
 
 const initialLoader = async (app) => {

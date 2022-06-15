@@ -4,7 +4,7 @@ const chatRooms = require("../queries/chatRoom");
 exports.loader = (server) => {
   const io = new Server(server, {
     cors: {
-      origin: "http://www.bumperdosi.com",
+      origin: "http://localhost:3000",
       methods: ["GET", "POST"],
       credentials: true,
     },
