@@ -20,13 +20,4 @@ const startApp = async(app) => {
 
 startApp(app);
 
-
-// connectServer(app);
-// initialLoader(app);
-
-// app.use("/signup", signup);
-// app.use("/friends", friends);
-
-//errorHandler(app);
-
 module.exports = app;
