@@ -76,7 +76,7 @@ exports.loader = (server) => {
         data.socketId = socket.id;
         socket.broadcast.to("gameRoom1").emit("userMovement", data);
       });
-    })
+    });
 
     socket.on("disconnect", () => {
       console.log("user disconnected");

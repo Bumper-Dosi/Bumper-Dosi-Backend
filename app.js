@@ -8,15 +8,16 @@ const connectServer = require("./server");
 const signup = require("./routes/signup");
 const friends = require("./routes/friends");
 
-const startApp = async(app) => {
+const startApp = async (app) => {
   await initialLoader(app);
   connectServer(app);
 
+  app.use("/", (req, res, next) => res.json({ message: "connected" }));
   app.use("/signup", signup);
   app.use("/friends", friends);
 
   errorHandler(app);
-}
+};
 
 startApp(app);
 
