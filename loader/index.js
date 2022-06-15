@@ -3,7 +3,7 @@ const logger = require("morgan");
 const cors = require("cors");
 const connectDB = require("../config/database");
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: "http://http://www.bumperdosi.com",
 };
 
 const initialLoader = (app) => {
